@@ -42,8 +42,6 @@ bool activo = true;
 
 ### Tipos de dato en C
 
-To-do: preguntar si debería poner rangos
-
 <center>
 
 | Tipos genéricos | Tipos de dato en C |
@@ -57,7 +55,9 @@ To-do: preguntar si debería poner rangos
 
 ### Enteros
 
-Representan números sin parte decimal: positivos, negativos y el cero. Los distintos tipos varían en el espacio que ocupan en memoria y, por lo tanto, en el rango que pueden representar.
+Representan números sin parte decimal: positivos, negativos y el cero.
+
+En C existen distintas variantes del tipo entero. La diferencia entre ellas es cuántos bytes ocupan en memoria: a más bytes, más valores distintos se pueden representar y mayor es el rango.
 
 ``` c
 short edad = 20;
@@ -65,7 +65,7 @@ int distancia = -300;
 long poblacion = 45000000;
 unsigned int cantidad = 8;   // solo positivos
 ```
-Los tipos `unsigned` solo admiten valores no negativos, lo que les da el doble de rango positivo.
+Los tipos `unsigned` son variantes que solo admiten valores no negativos. Al no necesitar representar negativos, pueden llegar al doble de valor máximo positivo con los mismos bytes.
 
 #### Operadores aritméticos:
 
@@ -177,7 +177,7 @@ No es lo mismo llamar a una variable `x` que llamarla `edad`, el nombre tiene qu
 
 ``` c
 int x = 21;       // ¿qué es x?
-int edad = 21;   // claro y descriptivo
+int edad = 21;   // más claro y descriptivo
 ```
 
 ---
@@ -218,10 +218,71 @@ contador = contador + 1;  // ahora contador vale 1
 
 ## Literales
 
-- ¿qué son?
+### ¿Qué son?
+
+Un **literal** es un valor escrito tal cual en el código fuente. Es el valor en sí mismo, no una variable ni una constante.
+
+``` c
+if (edad >= 18) { // 18 es un literal
+	printf("Soy mayor de edad");
+}
+```
 
 ## Constantes
 
-- ¿qué son?
-- ¿por qué se usan?
-- ¿cómo se declaran?
+### ¿Qué son?
+
+Una **constante** es un espacio en memoria, similar a una variable, pero cuyo valor se establece una sola vez y **no puede cambiar** durante la ejecución del programa.
+
+---
+
+### ¿Por qué se usan?
+
+- **Claridad**: hacen el código más legible.
+- **Mantenimiento**: si el valor necesita cambiar, solo se modifica en un solo lugar.
+- **Seguridad**: el compilador no permite que se modifique el valor en cualquier parte del código.
+
+---
+
+### ¿Cómo se declaran?
+
+En **C**, se usa la palabra clave `const` antes del tipo:
+
+``` c
+const double PI = 3.1415;
+const int MAX_INTENTOS = 3;
+const char SEPARADOR = '-';
+```
+
+Intentar modificar una constante produce un error de compilación:
+
+``` c
+const double PI = 3.1415;
+PI = 3.0;  // Esto NO está permitido, no compilará
+```
+
+---
+
+### Constantes vs Literales
+
+Usar literales dispersos a lo largo del código hace que sea más difícil de leer y mantener. Como aparecen sin nombre ni contexto, el lector tiene que adivinar qué representan. Además, si ese valor necesita cambiar, hay que encontrar y modificar cada aparición manualmente, lo que es fácil de olvidar y puede introducir errores.
+
+Por ejemplo, si las edades o el IVA cambian, este código obliga a buscar cada 18, 60 y 1.21 en todo el programa:
+``` c
+if (edad >= 18 && edad <= 60) {
+    precio = precio * 1.21;
+}
+```
+
+Con constantes, el valor se define en un solo lugar y cualquier cambio se propaga automáticamente a todo el código que las usa:
+``` c
+const int EDAD_MINIMA = 18;
+const int EDAD_MAXIMA = 60;
+const double IVA = 1.21;
+
+if (edad >= EDAD_MINIMA && edad <= EDAD_MAXIMA) {
+    precio = precio * IVA;
+}
+```
+
+>❗ Siempre que un literal represente algo con significado, se debe reemplazar por una constante con un nombre descriptivo.
