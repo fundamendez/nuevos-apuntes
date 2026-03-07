@@ -14,32 +14,6 @@ Por ejemplo, el tipo entero incluye valores como `-5`, `0`, `1`, `42`, pero no i
 
 ---
 
-### Python vs C
-
-En **Python**, no es necesario declarar el tipo de dato de una variable ya que el intérprete lo infiere automáticamente según el valor que se le asigna.
-
-Esto se llama **tipado dinámico**.
-
-``` python
-x = 5          # Python infiere que x es un entero
-y = 3.14       # Python infiere que y es un flotante
-nombre = "Ana" # Python infiere que nombre es una cadena
-activo = True  # Python infiere que activo es booleano
-```
-
-En **C**, en cambio, es obligatorio declarar el tipo de cada variable antes de usarla.
-
-Esto se llama **tipado estático**, una variable solo puede contener valores del tipo con el que fue declarada, durante toda la ejecución del programa.
-
-``` c
-int x = 5;
-double y = 3.14;
-char inicial = 'A';
-bool activo = true;
-```
-
----
-
 ### Tipos de dato en C
 
 <center>
@@ -57,7 +31,20 @@ bool activo = true;
 
 Representan números sin parte decimal: positivos, negativos y el cero.
 
-En C existen distintas variantes del tipo entero. La diferencia entre ellas es cuántos bytes ocupan en memoria: a más bytes, más valores distintos se pueden representar y mayor es el rango.
+En **C** existen distintas variantes del tipo entero.
+
+<center>
+
+| Tipo | Tamaño | Rango |
+| :---: | :---: | :---: |
+| `short` | 2 bytes | -32.768 a 32.767 |
+| `unsigned short` | 2 bytes | 0 a 65.535 |
+| `int` | 4 bytes | -2.147.483.648 a 2.147.483.647 |
+| `unsigned int` | 4 bytes | 0 a 4.294.967.295 |
+| `long` | 8 bytes | -9.223.372.036.854.775.808 a 9.223.372.036.854.775.807 |
+| `unsigned long` | 8 bytes | 0 a 18.446.744.073.709.551.615 |
+
+</center>
 
 ``` c
 short edad = 20;
@@ -81,11 +68,24 @@ Los tipos `unsigned` son variantes que solo admiten valores no negativos. Al no 
 
 </center>
 
-> ❗ La división entre enteros en C es división entera: `7 / 2` da `3`, no `3.5`.
+:::warning
 
-> - `a += b` es lo mismo que `a = a + b` (con todos los operadores aritméticos)
->
-> - `a++` es lo mismo que `a = a + 1`
+La división entre enteros en C es división entera: `7 / 2` da `3`, no `3.5`.
+
+:::
+
+:::info
+
+El operador `%` devuelve el resto de una división entera. Por ejemplo, `7 % 2` da `1` porque la división entera `7 / 2 = 3`, y nos queda `1` de resto: `7 = 2 * 3 + 1`. Es útil para saber si un número es par o impar (`n % 2 == 0` significa que `n` es par), o para saber si un número es divisible por otro (`n % 3 == 0` significa que `n` es divisible por `3`).
+
+:::
+
+:::tip
+
+- `a += b` es lo mismo que `a = a + b` (con todos los operadores aritméticos)
+- `a++` es lo mismo que `a = a + 1`
+
+:::
 
 ---
 
@@ -93,10 +93,12 @@ Los tipos `unsigned` son variantes que solo admiten valores no negativos. Al no 
 
 Representan números con parte decimal. Se usan cuando la precisión importa como en cálculos científicos, promedios, geometría, etc.
 
+La diferencia principal entre `float` y `double` es la precisión, `double` ocupa más bytes en memoria y por eso puede representar números con más decimales.
+
 ``` c
 float temperatura = 36.5;
 double precio = 1999.99;
-double pi = 3.14159265358979;
+double pi = 3.14159265358979; // float no alcanzaría para tanta precisión
 ```
 
 **Operadores aritméticos:** los mismos que para enteros (`+`, `-`, `*`, `/`), pero la división sí da resultado decimal:
@@ -122,7 +124,7 @@ char signo = '?';
 Solo puede tomar dos valores: `true` (verdadero) o `false` (falso). Es el tipo que devuelven las comparaciones y las operaciones lógicas.
 
 ``` c
-#include <stdbool.h>
+#include <stdbool.h> // Para poder usar booleanos, es necesario agregar esta linea al principio de nuestro programa
 
 bool aprobado = true;
 bool es_mayor = (edad >= 18);
@@ -130,7 +132,7 @@ bool es_mayor = (edad >= 18);
 
 #### Operadores relacionales
 
-Reciben dos valores del mismo tipo y devuelven un `bool`:
+Reciben dos valores **del mismo tipo** y devuelven un `bool`:
 
 <center> 
 
@@ -159,11 +161,36 @@ Reciben uno o dos `bool` y devuelven un `bool`:
 
 </center>
 
+---
+
+### Python vs C
+
+En **Python**, no es necesario declarar el tipo de dato de una variable ya que el intérprete lo infiere automáticamente según el valor que se le asigna. Además, el tipo puede cambiar durante la ejecución si se le asigna un valor de otro tipo.
+
+Esto se llama **tipado dinámico**.
+
+``` python
+x = 5          # Python infiere que x es un entero
+y = 3.14       # Python infiere que y es un flotante
+x = "hola"     # Ahora x es una cadena de caracteres, Python permite esto
+```
+
+En **C**, en cambio, es obligatorio declarar el tipo de cada variable antes de usarla, y ese tipo **no puede cambiar**, una vez declarada como `int`, solo podrá contener enteros durante toda la ejecución del programa.
+
+Esto se llama **tipado estático**.
+
+``` c
+int x = 5;
+double y = 3.14;
+char inicial = 'A';
+bool activo = true;
+```
+
 ## Variables
 
 ### ¿Qué son?
 
-Una **variable** es un espacio en memoria al que se le asocia un nombre. Ese nombre la identifica de forma única, es decir, no puede haber dos variables con el mismo nombre en el mismo ámbito. Su contenido puede cambiar a lo largo de la ejecución del programa mediante una asignación.
+Una **variable** es un espacio en memoria al que se le asocia un nombre y guarda un valor. Su contenido puede cambiar a lo largo de la ejecución del programa mediante una asignación. El nombre que la debe identificar de forma única, es decir, no puede haber dos variables con el mismo nombre en el mismo ámbito.
 
 Una variable tiene tres características fundamentales:
 
@@ -214,7 +241,11 @@ int contador = 0;
 contador = contador + 1;  // ahora contador vale 1
 ```
 
-> 💡 La asignación se evalúa de **derecha a izquierda**. Primero se calcula el lado derecho, y el resultado se guarda en la variable del lado izquierdo.
+:::info
+
+La asignación se evalúa de **derecha a izquierda**. Primero se calcula el lado derecho, y el resultado se guarda en la variable del lado izquierdo.
+
+:::
 
 ## Literales
 
@@ -285,4 +316,8 @@ if (edad >= EDAD_MINIMA && edad <= EDAD_MAXIMA) {
 }
 ```
 
->❗ Siempre que un literal represente algo con significado, se debe reemplazar por una constante con un nombre descriptivo.
+:::warning
+
+Siempre que un literal represente algo con significado, se debe reemplazar por una constante con un nombre descriptivo.
+
+:::
